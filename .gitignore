@@ -1,0 +1,19 @@
+# Virtual environments
+venv/
+.env/
+
+# IDE settings
+.idea/
+
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Mac system file
+.DS_Store
+
+# PDF and YAML files (from any folder)
+*.pdf
+*.yaml
+*.yml
+
