@@ -22,4 +22,5 @@ class CarManager(Turtle):
     @classmethod
     def next_level(cls):
         cls.move_distance += MOVE_INCREMENT
+        print(cls.move_distance)
 
