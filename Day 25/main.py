@@ -16,7 +16,6 @@ data = pandas.read_csv("weather_Data.csv")
 # print(data["temp"])
 
 temp_list = data["temp"].to_list()
-
 # print(data.condition)
 
 #Get data in row
