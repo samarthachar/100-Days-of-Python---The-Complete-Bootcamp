@@ -4,7 +4,7 @@ from rain_times import print_str
 import smtplib
 
 app_email = "shadowsharinganrainreminder@gmail.com"
-app_password = "qzbi ofgb gfri oscs"
+app_password = "qz***********cs"
 with smtplib.SMTP("smtp.gmail.com") as connection:
     connection.starttls()
     connection.login(user=app_email, password=app_password)
