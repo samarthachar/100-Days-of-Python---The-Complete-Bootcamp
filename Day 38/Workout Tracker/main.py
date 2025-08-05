@@ -5,7 +5,7 @@ import os
 
 APP_ID="6872a86a"
 APP_KEY="2f6dba6b98db2a7eb79db6fb8e143c54"
-AUTHORIZSTION="Bearer cld03hjdfls%dsglkndgj50*dslsdkgnfvlmsdnlgknrejfkdgnvdmvlblrdiuut9y3oerihfjsen"
+AUTHORISATION="Bearer cld03hjdfls%dsglkndgj50*dslsdkgnfvlmsdnlgknrejfkdgnvdmvlblrdiuut9y3oerihfjsen"
 
 nlp_for_exercise_endpoint = "https://trackapi.nutritionix.com/v2/natural/exercise"
 
