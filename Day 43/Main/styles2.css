@@ -1,0 +1,18 @@
+.red-text {
+    color: red;
+}
+
+#main {
+
+}
+
+a[draggable="false"]{
+    color: black;
+}
+a[draggable="true"]{
+    color: green;
+}
+
+*{
+    color:aqua;
+}
