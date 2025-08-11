@@ -21,4 +21,8 @@ __pycache__/
 # Ignore markdown files
 *.md
 
+**/.env
+**/.env.*
+
+
 /Users/Programming/Desktop/Programming/100 Days of Python Angela Yu/100 Days of Python - The Complete Bootcamp/Day 37/Habit Tracker/main.py
