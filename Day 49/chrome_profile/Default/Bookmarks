@@ -1,0 +1,47 @@
+{
+   "checksum": "e42ed0897ec223c170fd44d0426fc6fd",
+   "roots": {
+      "bookmark_bar": {
+         "children": [ {
+            "date_added": "13399501644670195",
+            "date_last_used": "0",
+            "guid": "0167554d-b046-47a9-b749-5ace61b6ae45",
+            "id": "5",
+            "meta_info": {
+               "power_bookmark_meta": ""
+            },
+            "name": "hello - Google Search",
+            "type": "url",
+            "url": "https://www.google.com/search?q=hello&sca_esv=3af941f69087be74&ei=QpqbaNDDAdmwhbIPvJ7OgAM&ved=0ahUKEwjQ7Kf0hIaPAxVZWEEAHTyPEzAQ4dUDCHE&uact=5&oq=hello&gs_lp=Egxnd3Mtd2l6LXNlcnAiBWhlbGxvMhAQABiABBixAxhDGMkDGIoFMg0QLhiABBixAxhDGIoFMgsQABiABBiSAxiKBTIKEAAYgAQYQxiKBTILEAAYgAQYsQMYigUyCxAAGIAEGLEDGIMBMgsQABiABBixAxiDATIIEAAYgAQYsQMyCBAAGIAEGLEDMggQABiABBixA0iBC1DTB1jdCHABeAGQAQCYAWmgAcoBqgEDMS4xuAEDyAEA-AEBmAIDoALiAcICChAAGLADGNYEGEfCAg0QABiABBiwAxhDGIoFwgIOEAAYsAMY5AIY1gTYAQHCAhkQLhiABBiwAxjRAxhDGMcBGMgDGIoF2AEBwgITEC4YgAQYsAMYQxjIAxiKBdgBAcICDxAAGIAEGEMYyQMYigUYCsICDhAuGIAEGLEDGNEDGMcBwgIQEC4YgAQY0QMYQxjHARiKBcICCBAuGIAEGLEDwgILEC4YgAQYsQMYgwGYAwCIBgGQBhO6BgYIARABGAmSBwMxLjKgB6IUsgcDMC4yuAfXAcIHBTItMi4xyAcT&sclient=gws-wiz-serp"
+         } ],
+         "date_added": "13399501614691862",
+         "date_last_used": "0",
+         "date_modified": "13399501650637313",
+         "guid": "0bc5d13f-2cba-5d74-951f-3f233fe6c908",
+         "id": "1",
+         "name": "Bookmarks Bar",
+         "type": "folder"
+      },
+      "other": {
+         "children": [  ],
+         "date_added": "13399501614691862",
+         "date_last_used": "0",
+         "date_modified": "13399501644670195",
+         "guid": "82b081ec-3dd3-529c-8475-ab6c344590dd",
+         "id": "2",
+         "name": "Other Bookmarks",
+         "type": "folder"
+      },
+      "synced": {
+         "children": [  ],
+         "date_added": "13399501614691862",
+         "date_last_used": "0",
+         "date_modified": "0",
+         "guid": "4cf2e351-0e85-532b-bb37-df045d8f8d0f",
+         "id": "3",
+         "name": "Mobile Bookmarks",
+         "type": "folder"
+      }
+   },
+   "version": 1
+}
