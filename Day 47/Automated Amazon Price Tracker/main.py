@@ -54,7 +54,7 @@ def send_email(final_price: float, final_title):
         connection.sendmail(
             from_addr=app_email,
             to_addrs=to_email,
-            msg=unidecode(f"Subject: Amazon Price Alert!\n\n{final_title} is now £{final_price}")
+            msg=unidecode(f"Subject: Amazon Price Alert!\n\n{final_title} is now £{final_price}\n{link}")
         )
 
 
