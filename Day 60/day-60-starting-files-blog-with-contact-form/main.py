@@ -24,8 +24,7 @@ def about():
 
 @app.route("/contact")
 def contact():
-    header = None
-    return render_template("contact.html" , header=header)
+    return render_template("contact.html" , h1text=False)
 
 
 @app.route("/post/<int:index>")
@@ -39,6 +38,7 @@ def show_post(index):
 
 @app.route('/contact', methods=["POST"])
 def receive_data():
+
     global name, email, phone_number, message
 
     name = request.form["name"]
@@ -46,7 +46,7 @@ def receive_data():
     phone_number = request.form["phone"]
     message = request.form["message"]
     bot = sendMail.MailBot(name, email, phone_number, message)
-    return render_template("contact.html", header=True)
+    return render_template("contact.html", h1text=True)
 
 
 if __name__ == "__main__":
