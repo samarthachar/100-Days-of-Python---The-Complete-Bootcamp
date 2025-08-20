@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <form action="{{ url_for('post_new_cafe') }}" method="post">
+    <label>Name of Cafe</label>
+    <input name="name"><br>
+    <label>Google Map URL Link</label>
+    <input name="map_url"><br>
+    <label>Image URL</label>
+    <input name="img_url"><br>
+    <label>Location</label>
+    <input name="location"><br>
+    <label>Has Sockets(True/False)</label>
+    <input name="has_sockets"><br>
+    <label>Has Toilets(True/False)</label>
+    <input name="has_toilet"><br>
+    <label>Has WiFi (True/False)</label>
+    <input name="has_wifi"><br>
+    <label>Can take calls (True/False)</label>
+    <input name="can_take_calls"><br>
+    <label>Seats</label>
+    <input name="seats"><br>
+    <label>Coffee Price</label>
+    <input name="coffee_price"><br>
+    <button type="submit">Submit</button><br>
+  </form>
+</body>
+</html>
