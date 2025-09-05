@@ -6,7 +6,7 @@ from scoreboard import Scoreboard
 import time
 
 def create_rows():
-    global y
+    y = 200
     blocks = []
     colors = ['blue', 'red', 'yellow', 'green']
     colour_count = 0
@@ -25,7 +25,7 @@ def up_clicked():
     global game_is_on
     game_is_on = True
 
-y = 200
+
 
 screen = Screen()
 screen.setup(width= 500, height=500)
@@ -57,7 +57,7 @@ while game_is_on:
         ball.bounce_x()
     if ball.ycor() > 230:
         ball.bounce_y()
-    if ball.distance(paddle) < 50 and ball.ycor() < -180:
+    if ball.ycor() < -180:
         ball.bounce_y()
 
     if ball.ycor() < -250:
