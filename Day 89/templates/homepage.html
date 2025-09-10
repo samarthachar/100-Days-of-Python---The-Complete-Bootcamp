@@ -9,8 +9,8 @@
       <div class="col-lg-6 mx-auto">
          <p class="fs-5 mb-4">Instead of paying for tools like this, use your money where it really matters.</p>
          <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-         <button type="button" class="btn btn-outline-info btn-lg px-4 me-sm-3 fw-bold">Log In</button>
-         <button type="button" class="btn btn-outline-info btn-lg px-4 me-sm-3 fw-bold">Sign Up</button>
+         <button type="button" class="btn btn-outline-info btn-lg px-4 me-sm-3 fw-bold" onclick="window.location.href='{{ url_for('login') }}'">Log In</button>
+         <button type="button" class="btn btn-outline-info btn-lg px-4 me-sm-3 fw-bold" onclick="window.location.href='{{ url_for('signup') }}'">Sign Up</button>
          <button type="button" class="btn btn-outline-light btn-lg px-4">Continue as Guest</button>
          </div>
       </div>
@@ -20,7 +20,7 @@
 <!-- Hanging Icons -->
 
 <div class="container px-4 py-5" id="hanging-icons">
-   <h2 class="pb-2 border-bottom">Hanging icons</h2>
+   <h2 class="pb-2 border-bottom">Let’s Get You Organized</h2>
    <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
       <div class="col d-flex align-items-start">
          <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
@@ -29,11 +29,9 @@
             </svg>
          </div>
          <div>
-            <h3 class="fs-2 text-body-emphasis">Featured title</h3>
-            <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-            <a href="#" class="btn btn-primary">
-            Primary button
-            </a>
+            <h3 class="fs-2 text-body-emphasis">Plan with Purpose</h3>
+            <p>Discover a smarter way to manage your tasks. Our intuitive layout keeps everything clear, focused, and right where you need it.</p>
+
          </div>
       </div>
       <div class="col d-flex align-items-start">
@@ -43,11 +41,9 @@
             </svg>
          </div>
          <div>
-            <h3 class="fs-2 text-body-emphasis">Featured title</h3>
-            <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-            <a href="#" class="btn btn-primary">
-            Primary button
-            </a>
+            <h3 class="fs-2 text-body-emphasis">Stay on Track</h3>
+            <p>Stay on top of your goals with tools that work for you—not against you. Simple, sleek, and built for momentum.</p>
+
          </div>
       </div>
       <div class="col d-flex align-items-start">
@@ -57,11 +53,9 @@
             </svg>
          </div>
          <div>
-            <h3 class="fs-2 text-body-emphasis">Featured title</h3>
-            <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-            <a href="#" class="btn btn-primary">
-            Primary button
-            </a>
+            <h3 class="fs-2 text-body-emphasis">Finish What Matters</h3>
+            <p>From daily to-dos to big-picture planning, we’ve got you covered. No clutter, no distractions—just pure productivity.</p>
+
          </div>
       </div>
    </div>
@@ -70,24 +64,10 @@
 <!-- Jumbotron -->
 <div class="container my-5">
    <div class="p-5 text-center bg-body-tertiary rounded-3">
-      <svg class="bi mt-4 mb-3" style="color: var(--bs-indigo);" width="100" height="100" aria-hidden="true">
-         <use xlink:href="#bootstrap"></use>
-      </svg>
-      <h1 class="text-body-emphasis">Jumbotron with icon</h1>
+      <h1 class="text-body-emphasis">Welcome to Effortless Productivity</h1>
       <p class="col-lg-8 mx-auto fs-5 text-muted">
-         This is a custom jumbotron featuring an SVG image at the top, some longer text that wraps early thanks to a responsive <code>.col-*</code> class, and a customized call to action.
+         Say goodbye to cluttered dashboards and overpriced tools. Our platform gives you everything you need to organize, prioritize, and finish your tasks—without the noise. Designed for clarity, built for speed, and always free. Whether you're planning your next big idea or just trying to stay on top of daily goals, you're in the right place.
       </p>
-      <div class="d-inline-flex gap-2 mb-5">
-         <button class="d-inline-flex align-items-center btn btn-primary btn-lg px-4 rounded-pill" type="button">
-            Call to action
-            <svg class="bi ms-2" width="24" height="24" aria-hidden="true">
-               <use xlink:href="#arrow-right-short"></use>
-            </svg>
-         </button>
-         <button class="btn btn-outline-secondary btn-lg px-4 rounded-pill" type="button">
-         Secondary link
-         </button>
-      </div>
    </div>
 </div>
 
