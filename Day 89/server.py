@@ -1,4 +1,4 @@
-from flask import Flask, render_template, abort, request, url_for, redirect
+from flask import Flask, render_template, abort, request, url_for, redirect, jsonify
 from flask_bootstrap import Bootstrap
 import secrets
 
@@ -36,7 +36,7 @@ def signup():
 
 @app.route('/todo/<todo_name>')
 def todo(todo_name):
-    todos = ['list']
+    todos = ['Your Todos']
     if todo_name in todos:
         return render_template('todo.html', name = todo_name, data=data)
     else:
@@ -44,13 +44,35 @@ def todo(todo_name):
 
 @app.route('/todo/<todo_name>/add-todo', methods=["POST"])
 def add_todo(todo_name):
+    global data, id_no
     title = request.form.get('title')
     description = request.form.get('description')
-    global data
-    data[title] = description
+    task_id = f"task{id_no}"
+    id_no += 1
+    data[task_id] = (title, description, False)
     return redirect(url_for('todo', todo_name=todo_name))
 
+
+@app.route("/<todo_name>/check-tick", methods=["POST"])
+def check_tick(todo_name):
+    json = request.get_json()
+    checked_ids = json['checked_ids']
+    for unchecked_id in data.keys():
+        if unchecked_id not in checked_ids:
+            title, description, _ = data[unchecked_id]
+            data[unchecked_id] = (title, description, False)
+    for checked_id in checked_ids:
+        title, description, _ = data[checked_id]
+        data[checked_id] = (title, description, True)
+    return redirect(url_for('todo', todo_name=todo_name))
+
+@app.route("/<todo_name>/delete-todo/<todo_id>")
+def delete_todo(todo_name, todo_id):
+    global data
+    data.pop(todo_id, None)
+    return redirect(url_for('todo', todo_name=todo_name))
 data = {}
+id_no = 0
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)
