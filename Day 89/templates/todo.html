@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class="bg-dark text-secondary px-4 py-5 text-center">
+<div class="bg-dark text-secondary px-4 py-5 text-center" xmlns="http://www.w3.org/1999/html">
    <div class="py-5">
       <h1 class="display-5 fw-bold text-white">{{ name }}</h1>
 
@@ -18,10 +18,13 @@
             <input class="form-check-input flex-shrink-0" type="checkbox"  style="font-size: 1.375em;" id="{{ box_id }}">
          {% endif %}
          <span class="pt-1 form-checked-content">
-            <strong>{{ title }}</strong>
+
+            <strong>
+               {% if checked %} <s> {% endif %}{{ title }}{% if checked %} </s> {% endif %}</strong>
             <small class="d-block text-body-secondary">
-               {{ description }}
+               {% if checked %} <s> {% endif %}{{ description}}{% if checked %} </s> {% endif %}
             </small>
+
             <button class="btn p-0 position-absolute top-50 end-0 translate-middle-y" onclick="window.location.href='/{{ name }}/delete-todo/{{ box_id }}'">
                <img src="{{ url_for('static', filename='delete.svg') }}" class="d-block ms-auto pe-2" style="width: 30px; margin: 0; " alt="Delete Button">
             </button>
