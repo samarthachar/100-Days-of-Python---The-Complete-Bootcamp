@@ -32,14 +32,32 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
 
+class Todo(db.Model):
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(String(150), nullable=False)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', backref=db.backref('todos', lazy=True))
+
+    tasks = db.relationship('Task', back_populates='todo', cascade='all, delete-orphan')
+
+
+
 class Task(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     title: Mapped[str] = mapped_column(String(250), nullable=False)
     description: Mapped[str] = mapped_column(String(250), nullable=True)
     ticked: Mapped[bool] = mapped_column(Boolean, nullable=False)
 
+    todo_id = db.Column(db.Integer, db.ForeignKey('todo.id'), nullable=False)
+    todo = db.relationship('Todo', back_populates='tasks')
+
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     user = db.relationship('User', backref=db.backref('tasks', lazy=True))
+
+
+
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -71,7 +89,7 @@ def login():
         if user and check_password_hash(user.password, form.password.data):
             login_user(user)
             flash('Logged in successfully!', 'success')
-            return redirect(url_for('home', logged_in = current_user.is_authenticated))  # or your desired route
+            return redirect(url_for('todo', todo_name="Todo1"))
         else:
             flash('Invalid email or password.', 'danger')
     else:
@@ -96,7 +114,7 @@ def signup():
 
         login_user(new_user)
         flash('Account created successfully!', 'success')
-        return redirect(url_for('home', logged_in = current_user.is_authenticated))
+        return redirect(url_for('todo', todo_name="Todo1"))
     for field, errors in form.errors.items():
         for error in errors:
             flash(f"{field.capitalize()}: {error}", "danger")
@@ -104,29 +122,69 @@ def signup():
 
 @app.route('/todo/<todo_name>')
 def todo(todo_name):
-    todos = ['Your Todos']
-    data = {}
-    tasks = db.session.query(Task).all()
-    for task in tasks:
-        data[task.id] = (task.title, task.description, task.ticked)
-    if todo_name in todos:
-        return render_template('todo.html', name=todo_name, data=data, logged_in = current_user.is_authenticated)
+    if not current_user.is_authenticated:
+        user = User.query.filter_by(email="NA").first()
+        if not user:
+            user = User(email="NA", password="NA")
+            db.session.add(user)
+            db.session.commit()
     else:
+        user = current_user
+
+    todos = user.todos
+
+    if not todos:
+        count = len(user.todos)
+        new_todo = Todo(
+            name=f"Todo{count+1}",
+            user_id=user.id
+        )
+        db.session.add(new_todo)
+        db.session.commit()
+        todos = user.todos
+
+    selected_todo = next((todo for todo in todos if todo.name == todo_name), None)
+    if not selected_todo:
         abort(404)
+
+    data = {
+        task.id: (task.title, task.description, task.ticked)
+        for task in selected_todo.tasks
+    }
+
+    return render_template('todo.html', name=todo_name, data=data, logged_in=current_user.is_authenticated)
+
+
 
 
 @app.route('/todo/<todo_name>/add-todo', methods=["POST"])
 def add_todo(todo_name):
+
     title = request.form.get('title')
     description = request.form.get('description')
-    with app.app_context():
+    if not current_user.is_authenticated:
         new_task = Task(
             title=title,
             description=description,
-            ticked=False
+            ticked=False,
+            todo=guestTodo,
+            user=guestUser
         )
         db.session.add(new_task)
         db.session.commit()
+        return redirect(url_for('todo', todo_name=todo_name, logged_in=current_user.is_authenticated))
+    todo = next((t for t in current_user.todos if t.name == todo_name), None)
+    if not todo:
+        abort(404)
+    new_task = Task(
+        title=title,
+        description=description,
+        ticked=False,
+        todo=todo,
+        user=current_user
+    )
+    db.session.add(new_task)
+    db.session.commit()
     return redirect(url_for('todo', todo_name=todo_name, logged_in = current_user.is_authenticated))
 
 
@@ -165,5 +223,8 @@ def logout():
     flash('You have been logged out.', 'info')
     return redirect(url_for('home', logged_in = current_user.is_authenticated))
 
+
+
 if __name__ == "__main__":
     app.run(debug=True)
+
