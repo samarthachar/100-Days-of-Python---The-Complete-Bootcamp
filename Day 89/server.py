@@ -124,7 +124,9 @@ def signup():
 def todo(todo_name):
     if not current_user.is_authenticated:
         user = User.query.filter_by(email="NA").first()
+        print("Not authenti")
         if not user:
+            print('No User found')
             user = User(email="NA", password="NA")
             db.session.add(user)
             db.session.commit()
@@ -226,5 +228,5 @@ def logout():
 
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)
 
