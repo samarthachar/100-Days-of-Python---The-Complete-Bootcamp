@@ -65,7 +65,13 @@ def load_user(user_id):
 with app.app_context():
     db.create_all()
 
-
+def clear_guest():
+    user = User.query.filter_by(email="NA").first()
+    if user:
+        for todo in user.todos:
+            db.session.delete(todo)
+        db.session.delete(user)
+        db.session.commit()
 
 
 @app.route('/')
@@ -84,6 +90,7 @@ def about():
 def login():
     form = LogInForm()
     if form.validate_on_submit():
+        clear_guest()
         user = User.query.filter_by(email=form.email.data).first()
 
         if user and check_password_hash(user.password, form.password.data):
@@ -106,7 +113,7 @@ def signup():
         if existing_user:
             flash('Email already registered. Please log in.', 'warning')
             return redirect(url_for('login', logged_in = current_user.is_authenticated))
-
+        clear_guest()
         hashed_password = generate_password_hash(form.password.data, method='pbkdf2:sha256')
         new_user = User(email=form.email.data, password=hashed_password)
         db.session.add(new_user)
@@ -118,15 +125,14 @@ def signup():
     for field, errors in form.errors.items():
         for error in errors:
             flash(f"{field.capitalize()}: {error}", "danger")
+
     return render_template('signup.html', form = form, logged_in = current_user.is_authenticated)
 
 @app.route('/todo/<todo_name>')
 def todo(todo_name):
     if not current_user.is_authenticated:
         user = User.query.filter_by(email="NA").first()
-        print("Not authenti")
         if not user:
-            print('No User found')
             user = User(email="NA", password="NA")
             db.session.add(user)
             db.session.commit()
@@ -161,21 +167,15 @@ def todo(todo_name):
 
 @app.route('/todo/<todo_name>/add-todo', methods=["POST"])
 def add_todo(todo_name):
-
+    if not current_user.is_authenticated:
+        user = User.query.filter_by(email="NA").first()
+        print("Not authenti")
+    else:
+        user = current_user
     title = request.form.get('title')
     description = request.form.get('description')
-    if not current_user.is_authenticated:
-        new_task = Task(
-            title=title,
-            description=description,
-            ticked=False,
-            todo=guestTodo,
-            user=guestUser
-        )
-        db.session.add(new_task)
-        db.session.commit()
-        return redirect(url_for('todo', todo_name=todo_name, logged_in=current_user.is_authenticated))
-    todo = next((t for t in current_user.todos if t.name == todo_name), None)
+
+    todo = next((t for t in user.todos if t.name == todo_name), None)
     if not todo:
         abort(404)
     new_task = Task(
@@ -183,7 +183,7 @@ def add_todo(todo_name):
         description=description,
         ticked=False,
         todo=todo,
-        user=current_user
+        user=user
     )
     db.session.add(new_task)
     db.session.commit()
@@ -222,6 +222,7 @@ def delete_todo(todo_name, todo_id):
 @login_required
 def logout():
     logout_user()
+    clear_guest()
     flash('You have been logged out.', 'info')
     return redirect(url_for('home', logged_in = current_user.is_authenticated))
 
@@ -230,3 +231,7 @@ def logout():
 if __name__ == "__main__":
     app.run(debug=True)
 
+try:
+    logout()
+except:
+    pass
