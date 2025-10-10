@@ -8,18 +8,20 @@
 <body>
 <div class="container col-xxl-8 px-4 py-5">
    <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
-      <div class="col-10 col-sm-8 col-lg-6"> <img src="{{ url_for('static', filename='test.jpg') }}" class="d-block mx-lg-auto img-fluid" alt="test.jpg" width="700" height="500" loading="lazy"> </div>
-      <form action="/file-uploaded" method="POST" enctype="multipart/form-data">
+       <div class="col-10 col-sm-8 col-lg-6"> <img src="{{ url_for('static', filename='test.jpg') }}" class="d-block mx-lg-auto img-fluid" alt="test.jpg" width="700" height="500" loading="lazy"> </div>
+
+
        <div class="col-lg-6">
          <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Get the top 10 colours of your image here.</h1>
-         <p class="lead">Just upload your picture here.</p>
+         <p class="lead">Just upload your picture here.</p><form action="/file-uploaded" method="POST" enctype="multipart/form-data">
           <div class="mb-3">
             <label for="formFile" class="form-label">Upload your file</label>
              <input name="file" class="form-control" type="file" id="formFile">
         </div>
          <div class="d-grid gap-2 d-md-flex justify-content-md-start"> <button type="submit"  class="btn btn-primary btn-lg px-4 me-md-2">Run</button></div>
-      </div>
-       </form>
+        </form>
+       </div>
+
    </div>
 </div>
 
@@ -33,7 +35,6 @@
                <h6 class="mb-0">{{colours.index(colour) + 1}}. {{ colour }}</h6>
                <p class="mb-0 opacity-75">Click to copy</p>
             </div>
-            <small class="opacity-50 text-nowrap">now</small>
          </div>
       </a>
        {% endfor %}
