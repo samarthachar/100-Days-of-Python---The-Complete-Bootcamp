@@ -1,7 +1,5 @@
 import requests
 from flask import Flask
-from ukpostcodeutils import validation
-
 # app  = Flask(__name__)
 #
 # @app.route("/")
@@ -17,23 +15,47 @@ def format_postcode(postcode):
     if " " in postcode:
         postcode = postcode.replace(" ","")
     postcode =  postcode.upper().strip()
-    return postcode, f"{postcode[:-3]} {postcode[-3:]}"
+    return  f"{postcode[:-3]} {postcode[-3:]}"
+
+def latandlong(postcode):
+    url = f"https://api.postcodes.io/postcodes/{postcode.replace(" ","")}"
+    data = requests.get(url=url).json()
+    try:
+        if data['error']:
+            return False
+    except:
+        pass
+    lat = data["result"]["latitude"]
+    long = data["result"]["longitude"]
+    return lat,long
+
+
+start = format_postcode(input("Enter start destination: "))
+end = format_postcode(input("Enter end destination: "))
+
+
+start = latandlong(start)
+end = latandlong(end)
+
+# Enter start destination: E8 3DY
+# Enter end destination: SE16 7TX
 
 
 
-
-start =format_postcode(input("TW170BL"))
-end = format_postcode(input("SW1A1AA"))
-
-if not validation.is_valid_postcode(start[0]):
-    print(f"Please enter a valid start postcode; {start[1]} is not valid.")
-elif not validation.is_valid_postcode(end[0]):
-    print(f"Please enter a valid end postcode; {end[1]} is not valid.")
+if not start:
+    print(f"Please enter a valid start postcode")
+elif not end:
+    print(f"Please enter a valid end postcode")
 else:
-    print(start[1])
-    print(end[1])
-    data = requests.get(url=f"https://api.tfl.gov.uk/Journey/JourneyResults/{start[1]}/to/{end[1]}").json()
-    print(data)
+
+    url=f"https://api.tfl.gov.uk/Journey/JourneyResults/{start[0]},{start[1]}/to/{end[0]},{end[1]}"
+    data = requests.get(url=url).json()
+
+    if "journeys" not in data:
+        print("No journey found for your inputs.")
+        exit()
+
     legs = data["journeys"][0]["legs"]
     summaries = [leg["instruction"]["summary"] for leg in legs ]
     print(summaries)
+
