@@ -1,11 +1,10 @@
 from datetime import datetime, timedelta
-
+import pandas as pd
 from selenium import webdriver
 import os
 from dotenv import load_dotenv
 import time
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -19,7 +18,7 @@ class BromComScraper:
         self.driver = webdriver.Chrome()
     def login(self):
         self.driver.get("https://www.bromcomvle.com/")
-        time.sleep(10)
+        time.sleep(5)
 
         school_id_field = self.driver.find_element(By.ID, "schoolid")
         school_id_field.send_keys(SCHOOL_ID)
@@ -33,14 +32,18 @@ class BromComScraper:
         wait = WebDriverWait(self.driver, 5)
         login_button = wait.until(EC.element_to_be_clickable((By.ID, "LoginButton")))
         login_button.click()
-        time.sleep(60)
+        time.sleep(5)
 
     def get_timetable(self):
 
         wait = WebDriverWait(self.driver, 5)
-        timetable_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'a[data-menuname="Timetable"]')))
+        timetable_button = self.driver.find_element(By.CSS_SELECTOR, 'a[data-menuname="Timetable"]')
         timetable_button.click()
-        time.sleep(10)
+        time.sleep(5)
+
+        this_week_button = self.driver.find_element(By.ID, "ButtonToday")
+        this_week_button.click()
+        time.sleep(5)
 
         table = self.driver.find_element(By.ID, "Timetable")
         thead = table.find_element(By.TAG_NAME, "thead")
@@ -57,18 +60,23 @@ class BromComScraper:
             for i, cell in enumerate(cells):
                 day = days[i]
                 text = cell.text.strip().upper()
+                if not text:
+                    continue
 
                 # Handle BREAK or LUNCH
                 if text in ["BREAK", "LUNCH"]:
-                    schedule[day].append({"period": text})
                     continue
 
 
                 try:
                     lines = cell.text.strip().split("\n")
 
-                    if len(lines) < 4:
+
+                    if len(lines) < 3:
                         print(f"Skipping malformed cell on {day}: {lines}")
+                        continue
+                    elif len(lines) < 4:
+                        # Tutor Class; Gives out anomalous data
                         continue
 
                     class_code = lines[0]
@@ -106,6 +114,8 @@ class BromComScraper:
         next_week = now + timedelta(days=7)
 
         for row in rows:
+            if not row.text:
+                continue
             try:
                 due_text = row.find_element(By.ID, "sp-table-contents-date").text.strip()
                 title = row.find_element(By.ID, "sp-table-contents-title").text.strip()
@@ -114,9 +124,10 @@ class BromComScraper:
                 status = row.find_element(By.ID, "sp-table-contents-status").text.strip()
 
                 due_date = datetime.strptime(due_text, "%d/%m/%Y")
-                if now <= due_date <= next_week:
+                if due_date <= next_week:
+                    formatted_date = due_date.strftime("%d/%m/%Y")
                     homeworks.append({
-                        "due": due_date,
+                        "due_Date": formatted_date,
                         "title": title,
                         "subject": subject,
                         "teacher": teacher,
@@ -126,9 +137,43 @@ class BromComScraper:
             except Exception as e:
                 print(f"Skipping row due to error: {e}")
                 continue
-        print(homeworks)
+        return homeworks
 
-bot = BromComScraper()
-bot.login()
-# timetable = bot.get_timetable()
-bot.get_homework()
+    def get_name(self):
+        name = self.driver.find_element(By.ID, "UsernameLabel").text
+        return name
+
+
+def scrape_data():
+    bot = BromComScraper()
+    bot.login()
+    timetable = bot.get_timetable()
+    homework = bot.get_homework()
+    name = bot.get_name()
+
+    return timetable, homework, name
+
+def save_data(data,name):
+    df = pd.DataFrame(data)
+    df.to_csv(f"csv/{name}.csv", index=False)
+
+def check_date():
+    df = pd.read_csv("csv/data.csv")
+    value = df.iloc[1, 0]
+    value = datetime.strptime(value, "%Y-%m-%d %H:%M:%S.%f")
+
+    return value.date() == datetime.now().date()
+
+def get_name():
+    df = pd.read_csv('csv/data.csv')
+    name = df.iloc[0, 0]
+    return name
+
+
+# if not check_date():
+#     timetable, homework, name = scrape_data()
+# else:
+#     timetable, homework, name =
+
+
+
