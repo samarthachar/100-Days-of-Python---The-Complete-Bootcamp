@@ -1,5 +1,7 @@
+import ast
 from datetime import datetime, timedelta
 import pandas as pd
+from pandas.errors import EmptyDataError
 from selenium import webdriver
 import os
 from dotenv import load_dotenv
@@ -150,6 +152,10 @@ def scrape_data():
     timetable = bot.get_timetable()
     homework = bot.get_homework()
     name = bot.get_name()
+    update_info(name)
+    save_data(timetable, "timetable")
+    save_data(homework, "homework")
+    bot.driver.close()
 
     return timetable, homework, name
 
@@ -158,22 +164,28 @@ def save_data(data,name):
     df.to_csv(f"csv/{name}.csv", index=False)
 
 def check_date():
-    df = pd.read_csv("csv/data.csv")
-    value = df.iloc[1, 0]
-    value = datetime.strptime(value, "%Y-%m-%d %H:%M:%S.%f")
+    try:
+        df = pd.read_csv("csv/info.csv")
+        value = df.iloc[1, 0]
+        value = datetime.strptime(value, "%Y-%m-%d %H:%M:%S.%f")
+    except (FileNotFoundError, EmptyDataError):
+        return False
+    except Exception:
+        return False
 
     return value.date() == datetime.now().date()
 
-def get_name():
-    df = pd.read_csv('csv/data.csv')
-    name = df.iloc[0, 0]
-    return name
+def update_info(name):
+    df = pd.DataFrame({"Col1": [name, datetime.now()]})
+    df.to_csv("csv/info.csv", index=False, )
 
 
-# if not check_date():
-#     timetable, homework, name = scrape_data()
-# else:
-#     timetable, homework, name =
-
-
-
+if not check_date():
+    timetable, homework, name = scrape_data()
+else:
+    timetable, homework, name = pd.read_csv("csv/timetable.csv").to_dict("list"), pd.read_csv("csv/homework.csv").to_dict("records"), pd.read_csv(
+        "csv/info.csv").iloc[0, 0]
+    timetable = {
+        day: [ast.literal_eval(entry) for entry in entries]
+        for day, entries in timetable.items()
+    }
